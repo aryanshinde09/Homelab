@@ -18,20 +18,18 @@ Downloaded jellyfin from Official jellyfin website. (diffrent steps for Diffrent
 
 3. Enable & Start the Service
 
-'''sudo systemctl enable jellyfin (for enable service on startup)
-    sudo systemctl start jellfin
+```
+sudo systemctl enable jellyfin (for enable service on startup)
+sudo systemctl start jellfin
 sudo systemctl status jellyfin
-'''
+```
 
 
 4. First-Time Setup Wizard
 
 Open in a browser (from the same machine or any device on the LAN):
-
 http://192.168.0.50:8096
-
 Then complete the setup wizard:
-
 
 Choose display language
 Create admin username/password
