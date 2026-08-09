@@ -25,7 +25,7 @@ Services
 
 
 Repo Structure
-
+```
 homelab/
 ├── README.md                  ← You are here
 ├── jellyfin/
@@ -39,5 +39,6 @@ homelab/
 │   └── backup-script.sh
 └── docs/
     └── homelab-overview.md    ← Cross-service notes (architecture, network layout)
+```
 
 Each service folder is self-contained: its README.md covers setup, configuration, migration notes, and troubleshooting specific to that service. Anything that spans multiple services (shared backup strategy, network diagram, etc.) lives in docs/.
