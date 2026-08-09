@@ -37,21 +37,25 @@ The UID/GID that can read the files under /mnt/hdd (read access is enough since 
 Check your own UID/GID with:
 
 bash
+```
 id
-
+```
 If it's not 1000:1000, either update the user: line to match, or chown the config/cache folders:
 
 bash
+```
 sudo mkdir -p /opt/docker/jellyfin/config
 sudo mkdir -p /opt/docker/jellyfin/cache
 sudo chown -R 1000:1000 /opt/docker/jellyfin
-
+```
 
 Setup
 Create host directories and fix ownership (see above).
 Bring the container up:
 bash
+```
    docker compose up -d jellyfin
+```
 Open http://192.168.0.50:8096 and complete the first-run setup wizard (admin account, preferred metadata language).
 Add libraries pointing at the container paths — /Anime, /Cartoons, /Movies, /Tv_shows — not the host paths.
 Let the initial library scan finish, then spot-check that posters/metadata pulled in correctly.
@@ -68,15 +72,20 @@ File Transformation — Lets other plugins inject UI changes into the web client
 
 Useful Commands
 
-# View logs
+View Logs
+```
 docker logs -f jellyfin
-
-# Restart the container
+```
+Restart the container
+```
 docker compose restart jellyfin
-
-# Update to the latest image
+```
+update to latest image
+```
 docker compose pull jellyfin
 docker compose up -d jellyfin
-
-# Shell into the running container
+```
+shell into the running container
+```
 docker exec -it jellyfin bash
+```
