@@ -1,13 +1,13 @@
 Homelab Overview
 
 Cross-service notes that don't belong to a single service's README — network layout, shared infrastructure decisions, and architecture.
-
+```
 Network Configuration 
 Static IP via DHCP Reservation 
 Host: aryan-linux (Linux Mint) 
 Reserved IP: 192.168.0.50 
 Services on this IP: Jellyfin, Navidrome 
-
+```
 Why
 By default, DHCP leases are temporary — the router can hand the host a different IP address after a lease renewal or reboot. Since both Jellyfin and Navidrome are accessed by IP (bookmarks, other devices on the LAN, and any future reverse proxy config), a changing host IP silently breaks access to both services until the new IP is tracked down.
 
