@@ -26,7 +26,7 @@ Steps
 Find the host's MAC address
 bash
 ```
-   ip link show
+ip link show
 ```
 
 Look for the MAC (link/ether) under your active network interface (e.g.wlo1 (Your Wi-Fi) or eno1 (Your Wired Ethernet))
@@ -35,7 +35,7 @@ Disable DHCP on the access point router In the AP's admin GUI, turn off its DHCP
 Access the main router Find its default gateway address (usually 192.168.0.1 or 192.168.1.1):
 bash
 ```
-   ip route | grep default
+ip route | grep default
 ```
 
 Enter that IP in a browser and log in with the main router's admin username and password.
@@ -45,15 +45,16 @@ Add the reservation Bind the host's MAC address to 192.168.0.50.
 Apply and renew the lease on the host
 bash
 ```
-   sudo dhclient -r
-   sudo dhclient
+sudo dhclient -r
+sudo dhclient
 ```
 Or simply reboot the host — it will request the same IP on next DHCP handshake.
 
 Verify
 bash
-   ip a
-
+```
+ip a
+```
 Confirm the host now shows 192.168.0.50 under the active interface.
 
 Result
