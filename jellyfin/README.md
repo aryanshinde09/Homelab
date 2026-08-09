@@ -54,7 +54,7 @@ Create host directories and fix ownership (see above).
 Bring the container up:
 bash
 ```
-   docker compose up -d jellyfin
+docker compose up -d jellyfin
 ```
 Open http://192.168.0.50:8096 and complete the first-run setup wizard (admin account, preferred metadata language).
 Add libraries pointing at the container paths — /Anime, /Cartoons, /Movies, /Tv_shows — not the host paths.
