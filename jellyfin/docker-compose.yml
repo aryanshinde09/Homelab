@@ -1,0 +1,30 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    # Runs as UID:GID 1000:1000 instead of root — must match ownership of
+    # the host media folders and the config/cache directories below.
+    user: 1000:1000
+    ports:
+      - 8096:8096/tcp   # Web UI
+      - 7359:7359/udp   # Client auto-discovery on the LAN
+    volumes:
+      - /opt/docker/jellyfin/config:/config
+      - /opt/docker/jellyfin/cache:/cache
+      - type: bind
+        source: /mnt/hdd/Anime
+        target: /Anime
+        read_only: true
+      - type: bind
+        source: /mnt/hdd/Cartoons
+        target: /Cartoons
+        read_only: true
+      - type: bind
+        source: /mnt/hdd/Movies
+        target: /Movies
+        read_only: true
+      - type: bind
+        source: /mnt/hdd/tv_show
+        target: /Tv_shows
+        read_only: true
+    restart: unless-stopped

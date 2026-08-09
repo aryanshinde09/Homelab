@@ -1,0 +1,13 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    # Runs as UID:GID 1000:1000 instead of root — must match ownership of
+    # the host music folder and the data directory below.
+    user: "1000:1000"
+    restart: unless-stopped
+    ports:
+      - "4533:4533"
+    volumes:
+      - /opt/docker/navidrome/data:/data
+      - /mnt/hdd/Music:/music:ro
