@@ -26,19 +26,21 @@ Services
 
 Repo Structure
 ```
-homelab/
-├── README.md                  ← You are here
+Homelab/
+├── docs/
+│   └── homelab-overview.md   --> File for configs that applies to all
+├── FuturePlans.md            --> Future plans
 ├── jellyfin/
-│   ├── README.md
-│   └── docker-compose.yml
+│   ├── docker-compose.yml
+│   └── README.md
 ├── navidrome/
-│   ├── README.md
-│   └── docker-compose.yml
+│   ├── docker-compose.yml
+│   └── README.md
 ├── rclone-backup/
-│   ├── README.md
-│   └── backup-script.sh
-└── docs/
-|   └── homelab-overview.md    ← Cross-service notes (architecture, network layout)
+│   ├── backup-script.sh
+│   └── README.md
+└── README.md                  --> you are here
+
 
 ```
 
