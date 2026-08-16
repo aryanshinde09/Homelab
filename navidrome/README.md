@@ -1,10 +1,11 @@
 Navidrome
 
-Self-hosted music server, running in Docker, serving a library from /mnt/hdd/Music. Navidrome speaks the Subsonic API, so it works with a wide range of client apps rather than locking you into one interface.
+Self-hosted music server, running in Docker.
 
 Overview
 
-Navidrome runs as a Docker container on aryan-linux, reachable on the LAN at a fixed address thanks to the DHCP reservation set on the main router.
+Navidrome runs as a Docker container on aryan-linux, reachable on the LAN, not outside the network.
+To access Navidrome server on android system i am using Symphonium app.
 
 Stack
 
@@ -14,38 +15,42 @@ Runs as: UID:GID 1000:1000 (non-root)
 Restart policy: unless-stopped
 docker-compose.yml
 
-See docker-compose.yml in this folder. It's extracted from a shared compose file that also defines Jellyfin — see jellyfin/README.md for that service.
+Check Navidrome official docker installation for docker compose format
+See docker-compose.yml in this folder. 
 
-Volume Mapping
+Docker compose file config explanation:
 
-| Host path                  | Container path | Purpose         | Mode       |
-|----------------------------|----------------|-----------------|------------|
-| /opt/docker/navidrome/data | /data          | Database        | Read-write |
-| /mnt/hdd/Music             | /music         | Music library   | Read-only  |
+user: "1000:1000" 
+my user UID/GID on my linux machine (as same as jellyfin setup)
 
-Permissions (UID/GID)
+volumes:
+      - /opt/docker/navidrome/data:/data
+   The path for navidrome files to be stored at
+      - /mnt/hdd/Music:/music:ro
+   the pathe where the music files are at (read only)
 
-Same pattern as Jellyfin: the container runs as 1000:1000, which must match the ownership of /opt/docker/navidrome/data (needs write access) and be able to read /mnt/hdd/Music.
+Library
 
-bash
-sudo mkdir -p /opt/docker/navidrome/data
-sudo chown -R 1000:1000 /opt/docker/navidrome
+Now navidrome has a particular way of showing music in library. 
+It groups songs in album based on the songs metadata (album artist name and its album name).
 
-Setup
+This works fine for albums that has only one album artist in the whole album.
+The main problem happens when one album has to many album artist such as indian songs.
+(Note : Haven't found a good alternative solution for this problem but the below solution works fine)
 
-Create the host data directory and fix ownership (see above).
-Bring the container up:
+The only Solution to this problem is edit the Metadata of the songs which have multiple album artist.
+We can do this using Music tag editing software such as puddletag for linux, mp3tag for windows.
 
-bash
-   docker compose up -d navidrome
+The only fields to change of the song are 
+Album artist of song -> Various Artists
+Compilation of song -> 1
+Also make if there are many artist (not album artist) in song use ; to separate each artist.
 
-Open http://192.168.0.50:4533 and create the initial admin account.
 
-Client Apps
-Web UI — built in, no setup needed, good for admin tasks and library management.
+Backups
 
-Symfonium (Android) — the recommended day-to-day client. Supports offline downloads, Android Auto, and has its own advanced tag parser on top of whatever the server sends. Because it does its own client-side parsing, it's possible for Symfonium to display artists slightly differently than the Navidrome web UI in edge cases — worth spot-checking both if something looks off, so you know whether the mismatch is server-side (Navidrome's scan) or client-side (Symfonium's parser).
+songs and navidrome.db from config path are backed up using rclone to google drive.
+Cause navidrome.db file is an SQLite database that stores all application data, user states, and indexed metadata for music collection, separate from actual audio files.
 
-Library Structure
 
 

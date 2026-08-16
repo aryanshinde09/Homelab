@@ -4,7 +4,7 @@ Documentation for my self-hosted homelab — media services, backup automation, 
 
 About
 
-This repo documents the services I run at home: what they do, how they're deployed, and the issues I actually hit while setting them up (so future-me, or anyone else, doesn't have to debug them twice). Everything here reflects a real, running setup.
+This repo documents the services I run at home: what they do, how they're deployed, and the issues I actually hit while setting them up (so future-me doesn't have to debug them twice). Everything here reflects a real, running setup.
 
 Host System
 
@@ -38,7 +38,8 @@ homelab/
 │   ├── README.md
 │   └── backup-script.sh
 └── docs/
-    └── homelab-overview.md    ← Cross-service notes (architecture, network layout)
+|   └── homelab-overview.md    ← Cross-service notes (architecture, network layout)
+
 ```
 
-Each service folder is self-contained: its README.md covers setup, configuration, migration notes, and troubleshooting specific to that service. Anything that spans multiple services (shared backup strategy, network diagram, etc.) lives in docs/.
+
