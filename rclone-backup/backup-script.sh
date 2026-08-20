@@ -7,12 +7,27 @@
 
 REMOTE="gdrive:Backups"
 
-# ── Docker container + its live volume path ────────────
-# Navidrome keeps its SQLite DB open while running — we stop it,
-# upload navidrome.db straight from its live path, then restart.
-DOCKER_CONTAINERS=("navidrome")              # <-- match `docker ps --format '{{.Names}}'`
-NAVIDROME_LIVE="/opt/docker/navidrome/data"     # <-- set to your actual host bind-mount path
-NAVIDROME_DB="$NAVIDROME_LIVE/navidrome.db"
+# ── Docker containers + their live volume paths ────────
+# Navidrome & Jellyfin keep their SQLite DBs open while running — we stop
+# them, sync their FULL data/config folders, then restart.
+DOCKER_CONTAINERS=("navidrome" "jellyfin")   # <-- match `docker ps --format '{{.Names}}'`
+
+declare -A DOCKER_PATHS=(                    # <-- set to your actual host bind-mount paths
+    ["navidrome"]="/opt/docker/navidrome/data"
+    ["jellyfin"]="/opt/docker/jellyfin/config"
+)
+
+declare -A DOCKER_REMOTE_NAMES=(
+    ["navidrome"]="Navidrome-Data"
+    ["jellyfin"]="Jellyfin-Config"
+)
+
+# Optional per-container excludes (rclone --exclude patterns, relative to
+# the container's LOCAL_PATH above). Leave a container out of this map to
+# sync it in full.
+declare -A DOCKER_EXCLUDES=(
+    ["jellyfin"]="metadata/**"
+)
 
 # ── Folders to back up ──────────────────
 declare -A FOLDERS=(
@@ -39,18 +54,21 @@ echo "╚═══════════════════════�
 echo -e "${NC}"
 echo -e "Started at: $(date '+%d-%m-%Y %H:%M:%S')\n"
 
-# ── Stop containers (only if running), stage locally, restart right away ──
+# ── Check + stop containers (only if running), restart right after sync ──
 declare -A WAS_RUNNING
+declare -A CONTAINER_FOUND
 
-stop_containers() {
+check_and_stop_containers() {
     for c in "${DOCKER_CONTAINERS[@]}"; do
         STATE=$(docker inspect -f '{{.State.Running}}' "$c" 2>/dev/null)
 
         if [ "$STATE" == "true" ]; then
+            CONTAINER_FOUND["$c"]=1
             WAS_RUNNING["$c"]=1
-            echo -e "${YELLOW}⏸  $c is running — stopping for local snapshot${NC}"
+            echo -e "${YELLOW}⏸  $c is running — stopping for consistent snapshot${NC}"
             docker stop "$c" >/dev/null 2>&1
         elif [ "$STATE" == "false" ]; then
+            CONTAINER_FOUND["$c"]=1
             echo -e "${CYAN}ℹ  $c already stopped — leaving it as is${NC}"
         else
             echo -e "${RED}⚠  $c not found — skipping${NC}"
@@ -71,26 +89,55 @@ start_containers() {
 # whatever we stopped. Harmless no-op if start_containers already ran.
 trap start_containers EXIT
 
-stop_containers
-
-echo -e "${YELLOW}📥 Uploading navidrome.db to Drive...${NC}"
-rclone copyto "$NAVIDROME_DB" "$REMOTE/Navidrome-Data/navidrome.db" -P \
---checkers 4 \
---transfers 4 \
---retries 5 \
---retries-sleep 30s
-
-if [ $? -eq 0 ]; then
-    echo -e "   ${GREEN}✓ Done${NC}\n"
-else
-    echo -e "   ${RED}✗ Failed${NC}\n"
-fi
-
-start_containers
-
 # ── Track results ────────────────────────
 SUCCESS=()
 FAILED=()
+
+check_and_stop_containers
+
+# ── Sync FULL data/config folders while containers are stopped ──────────
+for c in "${DOCKER_CONTAINERS[@]}"; do
+    LOCAL_PATH="${DOCKER_PATHS[$c]}"
+    REMOTE_NAME="${DOCKER_REMOTE_NAMES[$c]}"
+
+    if [ -z "${CONTAINER_FOUND[$c]}" ]; then
+        echo -e "${RED}✗ Skipping $c data — container not found${NC}\n"
+        FAILED+=("$c data (container not found)")
+        continue
+    fi
+
+    echo -e "${YELLOW}📦 Syncing $c: $LOCAL_PATH${NC}"
+    echo -e "   To : $REMOTE/$REMOTE_NAME"
+
+    if [ ! -d "$LOCAL_PATH" ]; then
+        echo -e "   ${RED}✗ Skipped — folder not found${NC}\n"
+        FAILED+=("$c data (folder not found)")
+        continue
+    fi
+
+    EXCLUDE_ARGS=()
+    if [ -n "${DOCKER_EXCLUDES[$c]}" ]; then
+        echo -e "   Excluding : ${DOCKER_EXCLUDES[$c]}"
+        EXCLUDE_ARGS=(--exclude "${DOCKER_EXCLUDES[$c]}")
+    fi
+
+    rclone sync "$LOCAL_PATH" "$REMOTE/$REMOTE_NAME" -P \
+    "${EXCLUDE_ARGS[@]}" \
+    --checkers 4 \
+    --transfers 4 \
+    --retries 5 \
+    --retries-sleep 30s
+
+    if [ $? -eq 0 ]; then
+        echo -e "   ${GREEN}✓ Done${NC}\n"
+        SUCCESS+=("$c data")
+    else
+        echo -e "   ${RED}✗ Failed${NC}\n"
+        FAILED+=("$c data")
+    fi
+done
+
+start_containers
 
 # ── Run backups ──────────────────────────
 for NAME in "${!FOLDERS[@]}"; do
