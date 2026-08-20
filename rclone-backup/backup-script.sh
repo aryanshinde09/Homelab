@@ -26,6 +26,7 @@ declare -A DOCKER_REMOTE_NAMES=(
 # the container's LOCAL_PATH above). Leave a container out of this map to
 # sync it in full.
 declare -A DOCKER_EXCLUDES=(
+    ["navidrome"]="cache/**"
     ["jellyfin"]="metadata/**"
 )
 

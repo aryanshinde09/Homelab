@@ -49,7 +49,7 @@ Also make if there are many artist (not album artist) in song use ; to separate 
 
 Backups
 
-songs and config path /opt/docker/navidrome/config are backed up using rclone to google drive.
+songs and config path /opt/docker/navidrome/config are backed up using rclone to google drive. Excluded cache folder inside backups cause that can be rebuild automatically by navidrome.
 
 
 
