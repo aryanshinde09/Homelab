@@ -49,8 +49,7 @@ Also make if there are many artist (not album artist) in song use ; to separate 
 
 Backups
 
-songs and navidrome.db from config path are backed up using rclone to google drive.
-Cause navidrome.db file is an SQLite database that stores all application data, user states, and indexed metadata for music collection, separate from actual audio files.
+songs and config path /opt/docker/navidrome/config are backed up using rclone to google drive.
 
 
 
