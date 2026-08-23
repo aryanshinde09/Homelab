@@ -9,7 +9,7 @@ Host: aryan-linux (Linux Mint)
 Reserved IP: 192.168.0.50  
 Services on this IP: Jellyfin, Navidrome  
 
-Why
+Why  
 To access navidrome and jellyfin we need and ip address assigned to the machine running on It. When the router DHCP leases the IP to the machine we use that IP to access jellyfin and navidrome services. But i can be a little hassle as router can assign different IPs at different time, meaning have to check which IP the machine is assigned and then use that ip to access it.
 
 To not have this problem I have set a DHCP Address reservation (192.168.0.50) to my linux machine using my machine mac address.
