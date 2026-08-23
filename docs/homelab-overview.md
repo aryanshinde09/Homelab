@@ -1,29 +1,30 @@
-Homelab Overview
+# Homelab Overview
 
-This file containes the Config that applies to all my.
+This file contains the Config that applies to all my services .
 
-Network Configuration
+## Network Configuration
 
-Static IP via DHCP Reservation
-Host: aryan-linux (Linux Mint)
-Reserved IP: 192.168.0.50
-Services on this IP: Jellyfin, Navidrome
+Static IP via DHCP Reservation,
+Host: aryan-linux (Linux Mint),
+Reserved IP: 192.168.0.50,
+Services on this IP: Jellyfin, Navidrome.
 
 Why
-The main problem is to access navidrome and jellyfin we need an ip address. The DHCP of router leases ip to the machine but it keep changing after reboot . this make accessing services bu checking the ip address assigned to machine. 
+To access navidrome and jellyfin we need and ip address assigned to the machine running on It. When the router DHCP leases the IP to the machine we use that IP to access jellyfin and navidrome services. But i can be a little hassle as router can assign different IPs at different time, meaning have to check which IP the machine is assigned and then use that ip to access it.
 
-To not have this problem I have set a DHCP Address reservation to my linux machine using my laptops mac address
+To not have this problem I have set a DHCP Address reservation (192.168.0.50) to my linux machine using my machine mac address.
 
-Network Topology
+## Network Topology
 
 My home network topology: 
 Main router (192.168.0.1) ->  Wired Access point (192.168.0.2) -> machine/Laptop
 
-Now the DHCP id Disabled on my wired AP as it can lead to ip lease mismatch as both my main router and ap can lease ip at same time.
+Now the DHCP is Disabled on my wired AP as it can lead to IP lease mismatch as both my main router and AP can lease IP at same time.
 
 So In DHCP setting of my main router i have set 192.168.0.50 for my machine using the machines mac address. 
 
 Result
+
 | Service   | Access URL               |
 |-----------|--------------------------|
 | Jellyfin  | http://192.168.0.50:8096 |
