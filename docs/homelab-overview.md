@@ -4,7 +4,7 @@ This file contains the Config that applies to all my services .
 
 ## Network Configuration
 
-Static IP via DHCP Reservation 
+Static IP via DHCP Reservation  
 Host: aryan-linux (Linux Mint)  
 Reserved IP: 192.168.0.50  
 Services on this IP: Jellyfin, Navidrome  
