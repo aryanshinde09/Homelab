@@ -19,8 +19,9 @@ Note: Stopping the Navidrome and jellyfin container before backup is essential, 
 The crontab (cron table) command in Linux is a built-in utility used to schedule and automate tasks (known as cron jobs) to run periodically in the background. It relies on the cron daemon (crond), which runs continuously and checks the system's crontab files every minute to execute matching time-based commands.
 
 #Rclone script run at at 7:10 pm  
+```
 10 19 * * * /home/aryan/Desktop/Scripts/gdrive_backup.sh >> /home/aryan/rclone_sync.log 2>&1  
-
+```
 The above script is the rclone - google drive script that runs automatically everyday at 7:10 pm. It also sends the logs to rclone_sync.log
 
 ## Rclone + Google Drive (Personal OAuth Client) (optional but best)  
