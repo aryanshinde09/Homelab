@@ -8,25 +8,26 @@ Navidrome runs as a Docker container on aryan-linux, reachable on the LAN, not o
 To access Navidrome server on android system i am using Symphonium app.  
 
 ## Stack
-
-Image: deluan/navidrome:latest (Docker Hub)
-Access: http://192.168.0.50:4533
-Runs as: UID:GID 1000:1000 (non-root)
-Restart policy: unless-stopped
-docker-compose.yml
-
+```
+Image: deluan/navidrome:latest (Docker Hub)  
+Access: http://192.168.0.50:4533  
+Runs as: UID:GID 1000:1000 (non-root)  
+Restart policy: unless-stopped  
+docker-compose.yml  
+```
 Check Navidrome official docker installation for docker compose format.  
 See docker-compose.yml in this folder.  
 
 ## Docker compose file config explanation:
-
-user: "1000:1000"   
+```
+user: "1000:1000"
+```
 my user UID/GID on my linux machine (as same as jellyfin setup)  
 
 volumes:  
-      - /opt/docker/navidrome/data:/data  
+    ```  - /opt/docker/navidrome/data:/data ``` 
    The path for navidrome files to be stored at  
-      - /mnt/hdd/Music:/music:ro  
+    ```  - /mnt/hdd/Music:/music:ro  ```
    the path where the music files are at (read only)  
 
 ## Library
@@ -42,8 +43,8 @@ The only Solution to this problem is edit the Metadata of the songs which have m
 We can do this using Music tag editing software such as puddletag for linux, mp3tag for windows.
 
 The only fields to change of the song are   
-Album artist of song -> Various Artists  
-Compilation of song -> 1  
+```Album artist of song -> Various Artists ```   
+```Compilation of song -> 1  ```
 
 Also make if there are many artist (not album artist) in song use ; to separate each artist.  
 
