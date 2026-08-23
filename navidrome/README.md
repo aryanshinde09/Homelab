@@ -1,13 +1,13 @@
-Navidrome
+# Navidrome
 
-Self-hosted music server, running in Docker.
+Self-hosted music server (like spotify), running in Docker.
 
-Overview
+## Overview
 
-Navidrome runs as a Docker container on aryan-linux, reachable on the LAN, not outside the network.
-To access Navidrome server on android system i am using Symphonium app.
+Navidrome runs as a Docker container on aryan-linux, reachable on the LAN, not outside the network.  
+To access Navidrome server on android system i am using Symphonium app.  
 
-Stack
+## Stack
 
 Image: deluan/navidrome:latest (Docker Hub)
 Access: http://192.168.0.50:4533
@@ -15,21 +15,21 @@ Runs as: UID:GID 1000:1000 (non-root)
 Restart policy: unless-stopped
 docker-compose.yml
 
-Check Navidrome official docker installation for docker compose format
-See docker-compose.yml in this folder. 
+Check Navidrome official docker installation for docker compose format.  
+See docker-compose.yml in this folder.  
 
-Docker compose file config explanation:
+## Docker compose file config explanation:
 
-user: "1000:1000" 
-my user UID/GID on my linux machine (as same as jellyfin setup)
+user: "1000:1000"   
+my user UID/GID on my linux machine (as same as jellyfin setup)  
 
-volumes:
-      - /opt/docker/navidrome/data:/data
-   The path for navidrome files to be stored at
-      - /mnt/hdd/Music:/music:ro
-   the pathe where the music files are at (read only)
+volumes:  
+      - /opt/docker/navidrome/data:/data  
+   The path for navidrome files to be stored at  
+      - /mnt/hdd/Music:/music:ro  
+   the path where the music files are at (read only)  
 
-Library
+## Library
 
 Now navidrome has a particular way of showing music in library. 
 It groups songs in album based on the songs metadata (album artist name and its album name).
@@ -47,7 +47,7 @@ Compilation of song -> 1
 Also make if there are many artist (not album artist) in song use ; to separate each artist.
 
 
-Backups
+## Backups
 
 songs and config path /opt/docker/navidrome/config are backed up using rclone to google drive. Excluded cache folder inside backups cause that can be rebuild automatically by navidrome.
 
