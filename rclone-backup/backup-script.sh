@@ -56,23 +56,25 @@ echo -e "${NC}"
 echo -e "Started at: $(date '+%d-%m-%Y %H:%M:%S')\n"
 
 # ── Check + stop containers (only if running), restart right after sync ──
+# NOTE: docker state is ONLY used to decide whether to stop/start the
+# container for a consistent snapshot. It does NOT gate whether we sync —
+# the data folder on disk is backed up regardless of whether the container
+# currently exists in Docker (e.g. after `docker compose down`, a removed
+# container, or one that hasn't been (re)created yet).
 declare -A WAS_RUNNING
-declare -A CONTAINER_FOUND
 
 check_and_stop_containers() {
     for c in "${DOCKER_CONTAINERS[@]}"; do
         STATE=$(docker inspect -f '{{.State.Running}}' "$c" 2>/dev/null)
 
         if [ "$STATE" == "true" ]; then
-            CONTAINER_FOUND["$c"]=1
             WAS_RUNNING["$c"]=1
             echo -e "${YELLOW}⏸  $c is running — stopping for consistent snapshot${NC}"
             docker stop "$c" >/dev/null 2>&1
         elif [ "$STATE" == "false" ]; then
-            CONTAINER_FOUND["$c"]=1
             echo -e "${CYAN}ℹ  $c already stopped — leaving it as is${NC}"
         else
-            echo -e "${RED}⚠  $c not found — skipping${NC}"
+            echo -e "${CYAN}ℹ  $c container not found — will still sync its data folder if present${NC}"
         fi
     done
 }
@@ -100,12 +102,6 @@ check_and_stop_containers
 for c in "${DOCKER_CONTAINERS[@]}"; do
     LOCAL_PATH="${DOCKER_PATHS[$c]}"
     REMOTE_NAME="${DOCKER_REMOTE_NAMES[$c]}"
-
-    if [ -z "${CONTAINER_FOUND[$c]}" ]; then
-        echo -e "${RED}✗ Skipping $c data — container not found${NC}\n"
-        FAILED+=("$c data (container not found)")
-        continue
-    fi
 
     echo -e "${YELLOW}📦 Syncing $c: $LOCAL_PATH${NC}"
     echo -e "   To : $REMOTE/$REMOTE_NAME"
