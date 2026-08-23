@@ -38,12 +38,13 @@ This works fine for albums that has only one album artist in the whole album.
 The main problem happens when one album has to many album artist such as indian songs.  
 (Note : Haven't found a good alternative solution for this problem but the below solution works fine)
 
-The only Solution to this problem is edit the Metadata of the songs which have multiple album artist.
+The only Solution to this problem is edit the Metadata of the songs which have multiple album artist.  
 We can do this using Music tag editing software such as puddletag for linux, mp3tag for windows.
 
 The only fields to change of the song are   
 Album artist of song -> Various Artists  
 Compilation of song -> 1  
+
 Also make if there are many artist (not album artist) in song use ; to separate each artist.  
 
 
