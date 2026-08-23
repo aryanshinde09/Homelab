@@ -1,21 +1,21 @@
-🏠 Homelab
+# 🏠 Homelab
 
 Documentation for my self-hosted homelab — media services, backup automation, and infrastructure notes, all running on a Linux Mint host with Docker.
 
-About
+## About
 
 This repo documents the services I run at home: what they do, how they're deployed, and the issues I actually hit while setting them up (so future-me doesn't have to debug them twice). Everything here reflects a real, running setup.
 
-Host System
+## Host System
 
 | Component         | Details                                |
 |-------------------|----------------------------------------|
 | OS                | Linux Mint (Zena)                      |
 | Container runtime | Docker                                 |
-| Media storage     | /mnt/hdd                               |
+| Media storage     | /mnt/hdd (My hard drive)               |
 | Backup            | rclone → Google Drive (personal OAuth) |
 
-Services
+## Services
 
 | Service       | Purpose                       | Deployment     | Docs                    |
 |---------------|-------------------------------|----------------|-------------------------|
@@ -24,7 +24,7 @@ Services
 | rclone Backup | Automated Google Drive backup | Crontab        | rclone-backup/README.md |
 
 
-Repo Structure
+## Repo Structure
 ```
 Homelab/
 ├── docs/
@@ -40,8 +40,6 @@ Homelab/
 │   ├── backup-script.sh
 │   └── README.md
 └── README.md                  --> you are here
-
-
 ```
 
 
