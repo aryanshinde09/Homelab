@@ -12,29 +12,28 @@ Access: http://192.168.0.50:8096
 Runs as: UID:GID 1000:1000 (non-root)  
 Restart policy: unless-stopped  
 
-The docker file format can be found in jellyfin official installation website
-See docker-compose.yml in this folder.
+The docker file format can be found in jellyfin official installation website,See docker-compose.yml in this folder.
 
 ## Explanation for docker file configs:
 
-user : 1000 : 1000 
+user : 1000 : 1000  
 My linux user UID and GID
 
-Jellyfin require two folder to store its files
-/opt/docker/jellyfin/config:/config
-This path stores jellyfin config files
+Jellyfin require two folder to store its files  
+/opt/docker/jellyfin/config:/config  
+This path stores jellyfin config files  
 
-/opt/docker/jellyfin/cache:/cache
-This path stores jellyfin cache
+/opt/docker/jellyfin/cache:/cache  
+This path stores jellyfin cache  
 
-(make sure the two folders for jellyfin has read,write and execute permission for user)
+(make sure the two folders for jellyfin has read,write and execute permission for user)  
 
-type: bind
-      source: /mnt/hdd/Anime
-      target: /Anime
-      read_only: true
+type: bind  
+      source: /mnt/hdd/Anime  
+      target: /Anime  
+      read_only: true  
 
-This are just a path to show jellyfin where the specific media are. 
+This are just a path to show jellyfin where the specific media are.  
 
 ## Backups
 
