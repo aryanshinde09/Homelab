@@ -4,10 +4,10 @@ This file contains the Config that applies to all my services .
 
 ## Network Configuration
 
-Static IP via DHCP Reservation,
-Host: aryan-linux (Linux Mint),
-Reserved IP: 192.168.0.50,
-Services on this IP: Jellyfin, Navidrome.
+Static IP via DHCP Reservation 
+Host: aryan-linux (Linux Mint)  
+Reserved IP: 192.168.0.50  
+Services on this IP: Jellyfin, Navidrome  
 
 Why
 To access navidrome and jellyfin we need and ip address assigned to the machine running on It. When the router DHCP leases the IP to the machine we use that IP to access jellyfin and navidrome services. But i can be a little hassle as router can assign different IPs at different time, meaning have to check which IP the machine is assigned and then use that ip to access it.
