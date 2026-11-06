@@ -5,10 +5,10 @@ Rclone is a free, open-source command-line program that lets you manage, sync, a
 ## Overview
 
 I have setup rclone to sync my music and other personal folder to google cloud for backup purpose. It is fully cli based system and only runs when called.  
-I have created a backup-script.sh (using claude) to sync my folders to google cloud as a backup.
-see the backup-script 
+I have created a 2 different files to sync my folders to google cloud as a backup.
+see the gdrive_backup.sh and gdrive_backup_server.sh
 
-## gdrive_backup.sh and gdrive_backup_server workflow in simple  
+## gdrive_backup.sh and gdrive_backup_server.sh workflow in simple  
 
 gdrive_backup.sh backs my normal folder (such as pictures,documents,desktops etc) on my pc to google cloud on a fixed time at 7:10 pm everyday using crontab
 
