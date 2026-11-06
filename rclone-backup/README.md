@@ -8,11 +8,16 @@ I have setup rclone to sync my music and other personal folder to google cloud f
 I have created a backup-script.sh (using claude) to sync my folders to google cloud as a backup.
 see the backup-script 
 
-## backup-script.sh workflow in simple  
+## gdrive_backup.sh and gdrive_backup_server workflow in simple  
 
-First checks if Navidrome or Jellyfin in docker are running --> If yes Stop them and backup their data --> start the container if they were running before backup --> Continue to backup other folder in the list (musics,picture,documnets etc.)
+gdrive_backup.sh backs my normal folder (such as pictures,documents,desktops etc) on my pc to google cloud on a fixed time at 7:10 pm everyday using crontab
 
-Note: Stopping the Navidrome and jellyfin container before backup is essential, as when they are working both apps have a database file that's actively being written to while running. If you copy it mid-write, you can grab a half-saved, corrupted copy. thats why it is necessary to stop before backup.
+gdrive_backup_server is for navidrome and jellyfin file which has a certain logic such as
+- If jellyfin or navidrome containers are running stop them and back up files and then restart the service
+- If jellyfin and navidrome are not running continue backing up without touching the docker.
+This doesnt have a crontab enabled i manually run this script every 3 to 5 days.
+
+**Note**: Stopping the Navidrome and jellyfin container before backup is essential, as when they are working both apps have a database file that's actively being written to while running. If you copy it mid-write, you can grab a half-saved, corrupted copy. thats why it is necessary to stop before backup.
 
 ## Crontab
 

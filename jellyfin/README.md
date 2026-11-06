@@ -41,11 +41,5 @@ This are just a path to show jellyfin where the specific media are.
 
 I have Backed up the config directory of jellyfin /opt/docker/jellyfin/config as it contains all the necessary files. 
 The only file i have excluded is the metadata file inside the config file as it can be build up automatically by jellyfin.
-
-## Plugins i use  
-
-Intro Skipper — Analyzes episode audio to detect intro/credit sequences and adds a skip button (or auto-skips).  
-Editor's Choice — Adds a full-width featured-content slider to the home screen, Netflix-style.  
-MyAnimeList — Metadata provider for anime, sourced from MyAnimeList.  
-File Transformation — Lets other plugins inject UI changes into the web client without patching Jellyfin's files directly.  
+  
 

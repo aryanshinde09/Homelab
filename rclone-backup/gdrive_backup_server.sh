@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # ─────────────────────────────────────────
-#   Google Drive Backup Script
-#   Uses: rclone sync / copy
+#   Google Drive Backup Script — Docker
+#   (Navidrome & Jellyfin)
+#   Uses: rclone sync
 # ─────────────────────────────────────────
 
 REMOTE="gdrive:Backups"
@@ -27,17 +28,7 @@ declare -A DOCKER_REMOTE_NAMES=(
 # sync it in full.
 declare -A DOCKER_EXCLUDES=(
     ["navidrome"]="cache/**"
-    ["jellyfin"]="metadata/**"
-)
-
-# ── Folders to back up ──────────────────
-declare -A FOLDERS=(
-    ["Documents"]="$HOME/Documents"
-    ["Pictures"]="$HOME/Pictures"
-    ["Desktop"]="$HOME/Desktop"
-    ["Music"]="/mnt/hdd/Music"
-    ["Resumes"]="/mnt/hdd/Resumes"
-    ["Obsidian"]="/mnt/hdd/obsidian"
+    ["jellyfin"]="metadata/**,cache/**,transcodes/**"
 )
 
 # ── Colors ───────────────────────────────
@@ -50,7 +41,7 @@ NC='\033[0m' # No Color
 # ── Header ───────────────────────────────
 echo -e "${CYAN}"
 echo "╔══════════════════════════════════════╗"
-echo "║       Google Drive Sync              ║"
+echo "║       Google Drive Sync — Docker     ║"
 echo "╚══════════════════════════════════════╝"
 echo -e "${NC}"
 echo -e "Started at: $(date '+%d-%m-%Y %H:%M:%S')\n"
@@ -115,13 +106,17 @@ for c in "${DOCKER_CONTAINERS[@]}"; do
     EXCLUDE_ARGS=()
     if [ -n "${DOCKER_EXCLUDES[$c]}" ]; then
         echo -e "   Excluding : ${DOCKER_EXCLUDES[$c]}"
-        EXCLUDE_ARGS=(--exclude "${DOCKER_EXCLUDES[$c]}")
+        IFS=',' read -ra PATTERNS <<< "${DOCKER_EXCLUDES[$c]}"
+        for pattern in "${PATTERNS[@]}"; do
+            EXCLUDE_ARGS+=(--exclude "$pattern")
+        done
     fi
 
     rclone sync "$LOCAL_PATH" "$REMOTE/$REMOTE_NAME" -P \
     "${EXCLUDE_ARGS[@]}" \
-    --checkers 4 \
-    --transfers 4 \
+    --fast-list \
+    --checkers 16 \
+    --transfers 16 \
     --retries 5 \
     --retries-sleep 30s
 
@@ -136,41 +131,9 @@ done
 
 start_containers
 
-# ── Run backups ──────────────────────────
-for NAME in "${!FOLDERS[@]}"; do
-    PATH_LOCAL="${FOLDERS[$NAME]}"
-    PATH_REMOTE="$REMOTE/$NAME"
-
-    echo -e "${YELLOW}📁 Backing up: $NAME${NC}"
-    echo -e "   From : $PATH_LOCAL"
-    echo -e "   To   : $PATH_REMOTE"
-
-    # Check if folder exists before trying to back up
-    if [ ! -d "$PATH_LOCAL" ]; then
-        echo -e "   ${RED}✗ Skipped — folder not found${NC}\n"
-        FAILED+=("$NAME (folder not found)")
-        continue
-    fi
-
-    # Run rclone
-    rclone sync "$PATH_LOCAL" "$PATH_REMOTE" -P \
-    --checkers 4 \
-    --transfers 4 \
-    --retries 5 \
-    --retries-sleep 30s
-
-    if [ $? -eq 0 ]; then
-        echo -e "   ${GREEN}✓ Done${NC}\n"
-        SUCCESS+=("$NAME")
-    else
-        echo -e "   ${RED}✗ Failed${NC}\n"
-        FAILED+=("$NAME")
-    fi
-done
-
 # ── Summary ──────────────────────────────
 echo -e "${CYAN}══════════════════════════════════════${NC}"
-echo -e "${CYAN}  Sync Summary${NC}"
+echo -e "${CYAN}  Sync Summary — Docker${NC}"
 echo -e "${CYAN}══════════════════════════════════════${NC}"
 echo -e "Finished at: $(date '+%d-%m-%Y %H:%M:%S')\n"
 

@@ -24,22 +24,4 @@ This repo documents the services I run at home: what they do, how they're deploy
 | rclone Backup | Automated Google Drive backup | Crontab        | rclone-backup/README.md |
 
 
-## Repo Structure
-```
-Homelab/
-├── docs/
-│   └── homelab-overview.md   --> File for configs that applies to all
-├── FuturePlans.md            --> Future plans
-├── jellyfin/
-│   ├── docker-compose.yml
-│   └── README.md
-├── navidrome/
-│   ├── docker-compose.yml
-│   └── README.md
-├── rclone-backup/
-│   ├── backup-script.sh
-│   └── README.md
-└── README.md                  --> you are here
-```
-
 
